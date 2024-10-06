@@ -3,6 +3,7 @@ package myredis
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -16,7 +17,7 @@ var RedisClient *redis.Client
 // tests the connection by sending a PING command. If the connection is successful,
 // it prints "Connected to Redis!". If the connection fails, it prints an error message.
 func InitRedis() {
-	redisAddress := "127.0.0.1:6379"
+	redisAddress := os.Getenv("REDIS_URL")
 
 	options := &redis.Options{
 		Addr: redisAddress,
