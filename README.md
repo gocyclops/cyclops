@@ -1,9 +1,11 @@
 Cyclops - Go Backend Boilerplate
+
 # Cyclops 🚀
 
 Cyclops is a boilerplate for building a backend application in Go. It includes a setup for database connections, Redis, S3, and routing with Fiber. This template is designed to help you quickly get started with your Go backend project.
 
 ## Features ✨
+
 - **Fiber**: An Express-inspired web framework for Go.
 - **GORM**: The fantastic ORM library for Golang.
 - **Redis**: In-memory data structure store, used as a database, cache, and message broker.
@@ -15,12 +17,11 @@ Cyclops is a boilerplate for building a backend application in Go. It includes a
 - **Docker**: Containerization for consistent development and deployment environments.
 - **GitHub Actions**: CI/CD workflows for automated testing and deployment.
 
-
 ## Getting Started 🚀
 
 ### Prerequisites 📋
 
-- [Go 1.23 or higher](https://golang.org/dl/)
+- [Go 1.23 or higher](https://go.dev/dl/)
 - [Git](https://git-scm.com/)
 - [Docker](https://www.docker.com/) (optional, for running services like PostgreSQL and Redis)
 
@@ -29,7 +30,7 @@ Cyclops is a boilerplate for building a backend application in Go. It includes a
 Clone the repository:
 
 ```sh
-git clone https://github.com/gocyclops/cyclops.git your_custom_directory
+git clone https://github.com/gocyclops/cyclops.git your_custom_directory --depth=1
 cd your_custom_directory
 rm -rf .git
 git init
@@ -44,7 +45,7 @@ find . -type f -exec sed -i 's/cyclops/yourprojectname/g' {} +
 Set up environment variables:
 
 ```sh
-mv .env.example .env
+cp .env.example .env
 go mod tidy
 ```
 
