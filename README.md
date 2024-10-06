@@ -74,6 +74,12 @@ Run the application:
 go run main.go
 ```
 
+## Optionally with Docker 🐳
+
+```
+docker-compose up --build
+```
+
 ## Documentation 📚
 
 - [Fiber Documentation](https://docs.gofiber.io/)
