@@ -57,6 +57,7 @@ DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
 DB_PORT=your_db_port
 DB_HOST=your_db_host
+REDIS_URL=your_redis_url
 JWT_SECRET=your_jwt_secret
 SECURE_COOKIE=true
 MAIL_FROM=your_email@example.com
@@ -64,6 +65,7 @@ S3_URL=your_s3_url
 S3_KEY_ID=your_s3_key_id
 S3_SECRET_ACCESS_KEY=your_s3_secret_access_key
 SENDGRID_API_KEY=your_sendgrid_api_key
+ALLOWED_ORIGINS=http://localhost:8080
 ```
 
 Run the application:
