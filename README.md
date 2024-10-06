@@ -118,4 +118,5 @@ Support the project by donating a cup of coffee: [Buy Me a Coffee](https://www.b
 
 ## License 📄
 
+Copyright © 2024 - present [TeddyMuli](https://github.com/TeddyMuli).
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
