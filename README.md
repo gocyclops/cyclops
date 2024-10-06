@@ -96,7 +96,7 @@ Install Air:
 go install github.com/cosmtrek/air@latest
 ```
 
-Edit the `air.toml` file in the root of your project.
+Edit the `.air.toml` file in the root of your project.
 
 Run Air:
 
