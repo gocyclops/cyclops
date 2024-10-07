@@ -1,9 +1,11 @@
 Cyclops - Go Backend Boilerplate
+
 # Cyclops 🚀
 
 Cyclops is a boilerplate for building a backend application in Go. It includes a setup for database connections, Redis, S3, and routing with Fiber. This template is designed to help you quickly get started with your Go backend project.
 
 ## Features ✨
+
 - **Fiber**: An Express-inspired web framework for Go.
 - **GORM**: The fantastic ORM library for Golang.
 - **Redis**: In-memory data structure store, used as a database, cache, and message broker.
@@ -15,12 +17,11 @@ Cyclops is a boilerplate for building a backend application in Go. It includes a
 - **Docker**: Containerization for consistent development and deployment environments.
 - **GitHub Actions**: CI/CD workflows for automated testing and deployment.
 
-
 ## Getting Started 🚀
 
 ### Prerequisites 📋
 
-- [Go 1.23 or higher](https://golang.org/dl/)
+- [Go 1.23 or higher](https://go.dev/dl/)
 - [Git](https://git-scm.com/)
 - [Docker](https://www.docker.com/) (optional, for running services like PostgreSQL and Redis)
 
@@ -29,7 +30,7 @@ Cyclops is a boilerplate for building a backend application in Go. It includes a
 Clone the repository:
 
 ```sh
-git clone https://github.com/gocyclops/cyclops.git your_custom_directory
+git clone https://github.com/gocyclops/cyclops.git your_custom_directory --depth=1
 cd your_custom_directory
 rm -rf .git
 git init
@@ -44,7 +45,7 @@ find . -type f -exec sed -i 's/cyclops/yourprojectname/g' {} +
 Set up environment variables:
 
 ```sh
-mv .env.example .env
+cp .env.example .env
 go mod tidy
 ```
 
@@ -56,6 +57,7 @@ DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
 DB_PORT=your_db_port
 DB_HOST=your_db_host
+REDIS_URL=your_redis_url
 JWT_SECRET=your_jwt_secret
 SECURE_COOKIE=true
 MAIL_FROM=your_email@example.com
@@ -63,12 +65,19 @@ S3_URL=your_s3_url
 S3_KEY_ID=your_s3_key_id
 S3_SECRET_ACCESS_KEY=your_s3_secret_access_key
 SENDGRID_API_KEY=your_sendgrid_api_key
+ALLOWED_ORIGINS=http://localhost:8080
 ```
 
 Run the application:
 
 ```sh
 go run main.go
+```
+
+## Optionally with Docker 🐳
+
+```
+docker-compose up --build
 ```
 
 ## Documentation 📚

@@ -7,6 +7,7 @@ import (
 	"cyclops/mys3"
 	"cyclops/routes"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -29,13 +30,14 @@ func main() {
 
 	// Initialize S3 connection
 	mys3.InitS3()
+	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
 
 	// Initialize Fiber router
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
-    AllowOrigins:     "",
-    AllowHeaders:     "Origin, Content-Type, Accept",
-    AllowCredentials: true,
+		AllowOrigins:     allowedOrigins,
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowCredentials: true,
 	}))
 
 	// Register all routes
@@ -43,13 +45,13 @@ func main() {
 
 	// Set up cron job to delete expired folders
 	c := cron.New()
-	c.AddFunc("@daily", func() { 
+	c.AddFunc("@daily", func() {
 		// Add cron jobs
 	})
 	c.Start()
-	
+
 	defer c.Stop()
-    
+	log.Println("Server is running at http://localhost:8080")
 	// Start the server
 	if err := app.Listen(":8080"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
