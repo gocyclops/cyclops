@@ -81,6 +81,17 @@ func (p *Project) generateFromTemplate(templatePath, outputPath string, data int
 	return nil
 }
 
+func (p *Project) generateFile(template, output string) error {
+	templatePath := filepath.Join("templates", template)
+	outputPath := filepath.Join(p.RootDir, output)
+
+	if err := p.generateFromTemplate(templatePath, outputPath, p); err != nil {
+		return fmt.Errorf("failed to generate file %s: %w", output, err)
+	}
+
+	return nil
+}
+
 func (p *Project) generateBaseFiles() error {
 	baseFileTemplates := map[string]string{
 		"main.tmpl": "main.go",
@@ -88,22 +99,35 @@ func (p *Project) generateBaseFiles() error {
 	}
 
 	for template, output := range baseFileTemplates {
-		templatePath := filepath.Join("templates", template)
-		outputPath := filepath.Join(p.RootDir, output)
-
-		if err := p.generateFromTemplate(templatePath, outputPath, p); err != nil {
-			return fmt.Errorf("failed to generate file %s: %w", output, err)
-		}
+		p.generateFile(template, output)
 	}
 
 	return nil
 }
 
 func (p *Project) generateFrameworkFiles() error {
+	frameworkFilesTemplates := map[string]string{
+		"frameworks/routes.tmpl": "routes/routes.go",
+		"frameworks/controllers.tmpl": "controllers/example_controller.go",
+	}
+
+	for template, output := range frameworkFilesTemplates {
+		p.generateFile(template, output)
+	}
+
 	return nil
 }
 
 func (p *Project) generateFeatureFiles() error {
+	featureFilesTemplates := map[string]string{
+		"features/s3.tmpl": "mys3/s3.go",
+		"features/mail.tmpl": "mail/mail.go",
+	}
+
+	for template, output := range featureFilesTemplates {
+		p.generateFile(template, output)
+	}
+
 	return nil
 }
 
