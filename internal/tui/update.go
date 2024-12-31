@@ -1,6 +1,9 @@
 package tui
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/gocyclops/cyclops/internal/generator"
+)
 
 func (m Model) updateInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
@@ -59,6 +62,15 @@ func (m Model) updateFeatures(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
+		project := generator.Project{
+			Name:      m.projectInput.Value(),
+			Framework: m.frameworks[m.cursor],
+			Features:  m.selected,
+		}
+
+		if err := project.Generate(); err != nil {
+			m.err = err
+		}
 		m.state = "done"
     return m, tea.Quit
 	case "esc":

@@ -14,7 +14,7 @@ type Model struct {
 	state					string
 	projectName 	string
   framework   	string
-  //err         	error
+  err         	error
 }
 
 func (m Model) Init() tea.Cmd {
