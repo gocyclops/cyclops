@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"text/template"
 )
 
 type Project struct {
@@ -29,33 +30,7 @@ var featureDirectories = map[string]string{
 	"mail":  "mail",
 }
 
-func (p *Project) createDirectories() error {
-	p.RootDir = filepath.Clean(p.Name)
-	if err := os.MkdirAll(p.RootDir, 0755); err != nil {
-		return fmt.Errorf("failed to create director: %w", err)
-	}
-
-	for _, dir := range baseDirectories {
-		dirPath := filepath.Join(p.RootDir, dir)
-		if err := os.MkdirAll(dirPath, 0755); err != nil {
-			return fmt.Errorf("failed to create directory %s: %w", dir, err)
-		}
-	}
-
-	for feature, enabled := range p.Features {
-		if enabled {
-			if dirName, exists := featureDirectories[feature]; exists {
-				dirPath := filepath.Join(p.RootDir, dirName)
-				if err := os.MkdirAll(dirPath, 0755); err != nil {
-					return fmt.Errorf("failed to create feature directory %s: %w", dirName, err)
-				}
-			}
-		}
-	}
-
-	return nil
-}
-
+// Create a single directory
 func (p *Project) CreateDirectory(path string) error {
 	fullPath := filepath.Join(p.RootDir, path)
 	if err := os.MkdirAll(fullPath, 0755); err != nil {
@@ -64,7 +39,63 @@ func (p *Project) CreateDirectory(path string) error {
 	return nil
 }
 
+// Create Base and Feature Directories.
+func (p *Project) createDirectories() error {
+	p.RootDir = filepath.Clean(p.Name)
+	if err := os.MkdirAll(p.RootDir, 0755); err != nil {
+		return fmt.Errorf("failed to create directory: %w", err)
+	}
+
+	for _, dir := range baseDirectories {
+		p.CreateDirectory(dir)
+	}
+
+	for feature, enabled := range p.Features {
+		if enabled {
+			if dirName, exists := featureDirectories[feature]; exists {
+				p.CreateDirectory(dirName)
+			}
+		}
+	}
+
+	return nil
+}
+
+// Generate files from a template
+func (p *Project) generateFromTemplate(templatePath, outputPath string, data interface{}) error {
+	template, err := template.ParseFiles(templatePath)
+	if err != nil {
+		return err
+	}
+
+	outputFile, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer outputFile.Close()
+
+	if err := template.Execute(outputFile, data); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (p *Project) generateBaseFiles() error {
+	baseFileTemplates := map[string]string{
+		"main.tmpl": "main.go",
+		"routes.tmpl": "routes/routes.go",
+	}
+
+	for template, output := range baseFileTemplates {
+		templatePath := filepath.Join("templates", template)
+		outputPath := filepath.Join(p.RootDir, output)
+
+		if err := p.generateFromTemplate(templatePath, outputPath, p); err != nil {
+			return fmt.Errorf("failed to generate file %s: %w", output, err)
+		}
+	}
+
 	return nil
 }
 

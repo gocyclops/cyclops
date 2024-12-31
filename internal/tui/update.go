@@ -71,6 +71,7 @@ func (m Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		if err := project.Generate(); err != nil {
 			m.err = err
 		}
+		
 		m.state = "done"
     return m, tea.Quit
 	case "esc":
