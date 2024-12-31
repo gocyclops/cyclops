@@ -60,6 +60,7 @@ func (m Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
 		m.state = "done"
+    return m, tea.Quit
 	case "esc":
 		m.state = "features"
 	}
@@ -82,6 +83,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m.updateFeatures(msg)
 			case "confirm":
 				return m.updateConfirm(msg)
+      case "done":
+        return m, tea.Quit
 		}
 	}
 	return m, nil

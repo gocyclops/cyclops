@@ -1,0 +1,23 @@
+package main
+
+import (
+  "log"
+  "os"
+  
+  "github.com/joho/godotenv"
+  {{if .UseRedis}}"{{.ProjectName}}/myredis"{{end}}
+  {{if .UseS3}}"{{.ProjectName}}/mys3"{{end}}
+  {{if .UseMail}}"{{.ProjectName}}/mail"{{end}}
+)
+
+func main() {
+  err := godotenv.Load()
+  if err != nil {
+      log.Fatal("Error loading .env file")
+  }
+  
+  {{if .UseRedis}}myredis.InitRedis(){{end}}
+  {{if .UseS3}}mys3.InitS3(){{end}}
+  
+  // Your framework-specific code here
+}
