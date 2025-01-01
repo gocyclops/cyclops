@@ -14,6 +14,8 @@ import (
   "github.com/gin-gonic/gin"
   {{- else if eq .Framework "chi" }}
   "github.com/go-chi/chi/v5"
+  {{- else if eq .Framework "gorilla/mux" }}
+  "github.com/gorilla/mux"
   {{- end }}
 )
 
