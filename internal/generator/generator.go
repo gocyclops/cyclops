@@ -28,6 +28,7 @@ var featureDirectories = map[string]string{
 	"redis": "myredis",
 	"s3":    "mys3",
 	"mail":  "mail",
+	"utils": "utils",
 }
 
 // Create a single directory
@@ -103,8 +104,17 @@ func (p *Project) generateFiles(templates map[string]string) error {
 
 func (p *Project) generateBaseFiles() error {
 	baseFileTemplates := map[string]string{
-		"main.tmpl": "main.go",
-		"routes.tmpl": "routes/routes.go",
+		"main.go.tmpl": "main.go",
+		"README.md.tmpl": "README.md",
+		"Dockerfile.tmpl": "Dockerfile",
+		".air.toml.tmpl": ".air.toml",
+		".env.tmpl": ".env",
+		".gitignore.tmpl": ".gitignore",
+		".dockerignore.tmpl": ".dockerignore",
+		"database/config.go.tmpl": "database/config.go",
+		"models/models.go.tmpl": "models/models.go",
+		"repository/repository.go.tmpl": "repository/repository.go",
+		"migrations/migrations.go.tmpl": "migrations/migrations.go",
 	}
 	return p.generateFiles(baseFileTemplates)
 }
@@ -118,11 +128,33 @@ func (p *Project) generateFrameworkFiles() error {
 }
 
 func (p *Project) generateFeatureFiles() error {
-	featureFilesTemplates := map[string]string{
-		"features/s3.tmpl": "mys3/s3.go",
-		"features/mail.tmpl": "mail/mail.go",
+	for feature, enabled := range p.Features {
+		if enabled {
+			var featureFilesTemplates map[string]string
+			switch feature {
+			case "s3":
+				featureFilesTemplates = map[string]string{
+					"features/s3/s3.go.tmpl": "mys3/s3.go",
+				}
+			case "mail":
+				featureFilesTemplates = map[string]string{
+					"features/mail/mail.go.tmpl": "mail/mail.go",
+				}
+			case "redis":
+				featureFilesTemplates = map[string]string{
+					"features/redis/redis.go.tmpl": "redis/redis.go",
+				}
+			case "auth":
+				featureFilesTemplates = map[string]string{
+					"features/utils/jwt.go.tmpl": "utils/jwt.go",
+				}
+			}
+			if err := p.generateFiles(featureFilesTemplates); err != nil {
+				return err
+			}
+		}
 	}
-	return p.generateFiles(featureFilesTemplates)
+	return nil
 }
 
 func (p *Project) Generate() error {
