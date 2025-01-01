@@ -92,17 +92,21 @@ func (p *Project) generateFile(template, output string) error {
 	return nil
 }
 
+func (p *Project) generateFiles(templates map[string]string) error {
+	for template, output := range templates {
+		if err := p.generateFile(template, output); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (p *Project) generateBaseFiles() error {
 	baseFileTemplates := map[string]string{
 		"main.tmpl": "main.go",
 		"routes.tmpl": "routes/routes.go",
 	}
-
-	for template, output := range baseFileTemplates {
-		p.generateFile(template, output)
-	}
-
-	return nil
+	return p.generateFiles(baseFileTemplates)
 }
 
 func (p *Project) generateFrameworkFiles() error {
@@ -110,12 +114,7 @@ func (p *Project) generateFrameworkFiles() error {
 		"frameworks/routes.tmpl": "routes/routes.go",
 		"frameworks/controllers.tmpl": "controllers/example_controller.go",
 	}
-
-	for template, output := range frameworkFilesTemplates {
-		p.generateFile(template, output)
-	}
-
-	return nil
+	return p.generateFiles(frameworkFilesTemplates)
 }
 
 func (p *Project) generateFeatureFiles() error {
@@ -123,12 +122,7 @@ func (p *Project) generateFeatureFiles() error {
 		"features/s3.tmpl": "mys3/s3.go",
 		"features/mail.tmpl": "mail/mail.go",
 	}
-
-	for template, output := range featureFilesTemplates {
-		p.generateFile(template, output)
-	}
-
-	return nil
+	return p.generateFiles(featureFilesTemplates)
 }
 
 func (p *Project) Generate() error {
