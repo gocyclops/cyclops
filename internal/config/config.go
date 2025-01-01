@@ -14,7 +14,17 @@ type Config struct {
 }
 
 func Load(path string) (*Config, error) {
-	return nil, nil
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read config file: %w", err)
+	}
+
+	var config Config
+	if err := yaml.Unmarshal(data, &config); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal config: %w", err)
+	}
+
+	return &config, nil
 }
 
 func Save(config *Config, path string) error {
