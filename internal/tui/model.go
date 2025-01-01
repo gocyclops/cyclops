@@ -31,13 +31,13 @@ const (
 
 func NewModel() Model {
 	ti := textinput.New()
-	ti.Placeholder = "project-name"
+	ti.Placeholder = "Enter project name"
 	ti.Focus()
 
 	return Model{
 		projectInput: ti,
-		frameworks: []string{"fiber", "gin", "chi"},
-		features: []string{"redis", "s3", "mail"},
+		frameworks: []string{"fiber", "gin", "chi", "gorilla/mux"},
+		features: []string{"redis", "s3", "mail", "auth"},
 		selected: make(map[string]bool),
 		state: StateInput,
 	}
