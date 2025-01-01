@@ -83,7 +83,7 @@ func (p *Project) generateFromTemplate(templatePath, outputPath string, data int
 }
 
 func (p *Project) generateFile(template, output string) error {
-	templatePath := filepath.Join("templates", template)
+	templatePath := filepath.Join("internal", "templates", template)
 	outputPath := filepath.Join(p.RootDir, output)
 
 	if err := p.generateFromTemplate(templatePath, outputPath, p); err != nil {
