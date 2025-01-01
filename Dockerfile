@@ -9,8 +9,6 @@ RUN go mod download
 
 COPY . .
 
-COPY .env .env
-
 RUN go build -o main .
 
 # Stage 2: Run the Go App
@@ -20,8 +18,6 @@ WORKDIR /root/
 
 COPY --from=builder /app/main .
 COPY .env /root/
-
-COPY --from=builder /app/.env .
 
 EXPOSE 8080
 
