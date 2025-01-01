@@ -1,0 +1,10 @@
+package migrations
+
+import (
+	"{{ .Name }}/database"
+	"{{ .Name }}/models"
+)
+
+func Migrate() {
+  database.DB.AutoMigrate(&models.User{})
+}
