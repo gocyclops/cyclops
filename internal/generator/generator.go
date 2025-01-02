@@ -23,7 +23,7 @@ var baseDirectories = []string{
 	"repository",
 	"routes",
 	"migrations",
-	".github",
+	".github/workflows",
 }
 
 var featureDirectories = map[string]string{
@@ -117,6 +117,7 @@ func (p *Project) generateBaseFiles() error {
 		"base/models/models.go.tmpl": "models/models.go",
 		"base/repository/repository.go.tmpl": "repository/repository.go",
 		"base/migrations/migrations.go.tmpl": "migrations/migrations.go",
+		"base/test.yml.tmpl": ".github/workflows/test.yml",
 	}
 	return p.generateFiles(baseFileTemplates)
 }
