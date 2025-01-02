@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"text/template"
 
@@ -31,6 +32,29 @@ var featureDirectories = map[string]string{
 	"s3":    "mys3",
 	"mail":  "mail",
 	"utils": "utils",
+}
+
+func (p *Project) InitGitRepo() error {
+	projectPath := filepath.Clean(p.Name)
+
+	commands := []struct {
+		name string
+		args []string
+	}{
+		{"git", []string{"init"}},
+		{"git", []string{"add", "."}},
+		{"git", []string{"commit", "-m", "Initial commit from Cyclops 🚀"}},
+	}
+
+	for _, cmd := range commands {
+		command := exec.Command(cmd.name, cmd.args...)
+		command.Dir = projectPath
+		if err := command.Run(); err != nil {
+			return fmt.Errorf("failed to execute git command '%s': %w", cmd.name, err)
+		}
+	}
+
+	return nil
 }
 
 // Create a single directory
@@ -193,6 +217,10 @@ func (p *Project) Generate() error {
 
 	if err := p.generateConfigYaml(); err != nil {
 		return fmt.Errorf("failed to generate config.yaml: %w", err)
+	}
+
+	if err := p.InitGitRepo(); err != nil {
+		return fmt.Errorf("failed to initialize git repository: %w", err)
 	}
 
 	return nil
