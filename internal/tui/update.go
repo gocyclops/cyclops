@@ -1,9 +1,22 @@
 package tui
 
 import (
+	"fmt"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/gocyclops/cyclops/internal/generator"
 )
+
+type errMsg struct {
+	err error
+}
+
+func generateProject(project generator.Project) tea.Cmd {
+	return func() tea.Msg {
+		err := project.Generate()
+    return errMsg{err: err}
+	}
+}
 
 func (m Model) updateInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
@@ -62,20 +75,25 @@ func (m Model) updateFeatures(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
-		project := generator.Project{
-			Name:      m.projectInput.Value(),
-			Framework: m.frameworks[m.cursor],
-			Features:  m.selected,
+		if !m.generating {
+			project := generator.Project{
+				Name:      m.projectInput.Value(),
+				Framework: m.frameworks[m.cursor],
+				Features:  m.selected,
+			}
+	
+			if err := project.Generate(); err != nil {
+				m.err = err
+			}
+			
+			m.generating = true
+			m.progress = "Generating project..."
+			return m, generateProject(project)	
 		}
-
-		if err := project.Generate(); err != nil {
-			m.err = err
-		}
-		
-		m.state = "done"
-    return m, tea.Quit
 	case "esc":
-		m.state = "features"
+		if !m.generating {
+			m.state = "features"
+		}
 	}
 	return m, nil
 }
@@ -99,6 +117,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
       case "done":
         return m, tea.Quit
 		}
+
+	case errMsg:
+		if msg.err != nil {
+			m.err = msg.err
+			m.progress = fmt.Sprintf("Error: %v", msg.err)
+		} else {
+			m.progress = "Project generation complete! 🎉\n"
+		}
+		m.generating = false
+		m.state = "done"
+		return m, tea.Quit
 	}
+
 	return m, nil
 }
