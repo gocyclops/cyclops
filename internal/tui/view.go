@@ -40,6 +40,10 @@ func (m Model) viewFeatures() string {
 }
 
 func (m Model) viewConfirm() string {
+	if m.generating {
+		return fmt.Sprintf("Progress: %s", m.progress)
+	}
+
 	s := fmt.Sprintf("Project Name: %s\n", m.projectName)
 	s += fmt.Sprintf("Framework: %s\n", m.framework)
 	s += "Features:\n"
@@ -52,7 +56,7 @@ func (m Model) viewConfirm() string {
 }
 
 func (m Model) viewDone() string {
-	return "Project generation complete! 🎉\n"
+	return m.progress + "\nPress any key to exit"
 }
 
 func (m Model) View() string {
