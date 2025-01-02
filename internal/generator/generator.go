@@ -66,24 +66,24 @@ func (p *Project) createDirectories() error {
 func (p *Project) generateFromTemplate(templatePath, outputPath string, data interface{}) error {
 	template, err := template.ParseFiles(templatePath)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to parse template %s: %w", templatePath, err)
 	}
 
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create output file %s: %w", outputPath, err)
 	}
 	defer outputFile.Close()
 
 	if err := template.Execute(outputFile, data); err != nil {
-		return err
+		return fmt.Errorf("failed to execute template: %w", err)
 	}
 
 	return nil
 }
 
 func (p *Project) generateFile(template, output string) error {
-	templatePath := filepath.Join("internal", "templates", template)
+	templatePath := filepath.Join("templates", template)
 	outputPath := filepath.Join(p.RootDir, output)
 
 	if err := p.generateFromTemplate(templatePath, outputPath, p); err != nil {
@@ -104,17 +104,17 @@ func (p *Project) generateFiles(templates map[string]string) error {
 
 func (p *Project) generateBaseFiles() error {
 	baseFileTemplates := map[string]string{
-		"main.go.tmpl": "main.go",
-		"README.md.tmpl": "README.md",
-		"Dockerfile.tmpl": "Dockerfile",
-		".air.toml.tmpl": ".air.toml",
-		".env.tmpl": ".env",
-		".gitignore.tmpl": ".gitignore",
-		".dockerignore.tmpl": ".dockerignore",
-		"database/config.go.tmpl": "database/config.go",
-		"models/models.go.tmpl": "models/models.go",
-		"repository/repository.go.tmpl": "repository/repository.go",
-		"migrations/migrations.go.tmpl": "migrations/migrations.go",
+		"base/main.go.tmpl": "main.go",
+		"base/README.md.tmpl": "README.md",
+		"base/Dockerfile.tmpl": "Dockerfile",
+		"base/.air.toml.tmpl": ".air.toml",
+		"base/.env.tmpl": ".env",
+		"base/.gitignore.tmpl": ".gitignore",
+		"base/.dockerignore.tmpl": ".dockerignore",
+		"base/database/config.go.tmpl": "database/config.go",
+		"base/models/models.go.tmpl": "models/models.go",
+		"base/repository/repository.go.tmpl": "repository/repository.go",
+		"base/migrations/migrations.go.tmpl": "migrations/migrations.go",
 	}
 	return p.generateFiles(baseFileTemplates)
 }
@@ -142,7 +142,7 @@ func (p *Project) generateFeatureFiles() error {
 				}
 			case "redis":
 				featureFilesTemplates = map[string]string{
-					"features/redis/redis.go.tmpl": "redis/redis.go",
+					"features/redis/redis.go.tmpl": "myredis/redis.go",
 				}
 			case "auth":
 				featureFilesTemplates = map[string]string{
