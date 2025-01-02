@@ -15,6 +15,8 @@ type Model struct {
 	projectName 	string
   framework   	string
   err         	error
+	generating bool
+  progress   string
 }
 
 func (m Model) Init() tea.Cmd {
