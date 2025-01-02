@@ -9,10 +9,10 @@ import (
   "test/repository"
   "encoding/json"
   "net/http"
-  "github.com/gin-gonic/gin"
+  "github.com/gofiber/fiber/v2"
 )
-func Welcome(c *gin.Context) {
-  c.String(200, "Welcome to test!")
+func Welcome(c *fiber.Ctx) error {
+  return c.SendString("Welcome to test!")
 }
 
 // CreateUser is an example function that handles the creation of a new user.
@@ -20,23 +20,25 @@ func Welcome(c *gin.Context) {
 // If the JSON parsing fails, it returns a 400 Bad Request status with an error message.
 // If the user creation in the repository fails, it returns a 500 Internal Server Error status with an error message.
 // On successful creation, it returns a 201 Created status with the created user in the response.
-func CreateUser(c *gin.Context) {
-  var user models.User
+func CreateUser(c *fiber.Ctx) error {
+  user := new(models.User)
 
-  if err := c.ShouldBindJSON(&user); err != nil {
-    c.JSON(400, gin.H{"error": "Cannot parse JSON"})
-    return
+  if err := c.BodyParser(user); err != nil {
+    return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Cannot parse JSON"})
   }
 
-  if err := repository.CreateUser(&user); err != nil {
-    c.JSON(500, gin.H{"error": "Cannot create user"})
-    return
+  if err := repository.CreateUser(user); err != nil {
+    return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Cannot create user"})
   }
 
-  c.JSON(201, user)
+  return c.Status(fiber.StatusCreated).JSON(user)
 }
 
-func RegisterRoutes(router *gin.Engine) {
-  router.GET("/", Welcome)
-  router.POST("/users", CreateUser)
+func RegisterRoutes(app *fiber.App) {
+  app.Get("/", func(c *fiber.Ctx) error {
+    return Welcome(c)
+  })
+  app.Post("/users", func(c *fiber.Ctx) error {
+    return CreateUser(c)
+  })
 }

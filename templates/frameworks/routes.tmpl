@@ -28,6 +28,6 @@ import (
 {{- if .Features.redis }}
 // - redisClient: A pointer to the Redis client.
 {{- end }}
-func RegisterRoutes(app {{ if eq .Framework "fiber" }}*fiber.App{{ else if eq .Framework "gin" }}*gin.Engine{{ else if eq .Framework "chi" }}*chi.Mux{{ else if eq .Framework "gorilla/mux" }}*mux.Router{{ end }}{{ if .Features.redis }}, redisClient *redis.Client{{ end }}) {
+func RegisterRoutes(app {{ if eq .Framework "fiber" }}*fiber.App{{ else if eq .Framework "gin" }}*gin.Engine{{ else if eq .Framework "echo" }}*echo.Echo{{ else if eq .Framework "gorilla/mux" }}*mux.Router{{ end }}{{ if .Features.redis }}, redisClient *redis.Client{{ end }}) {
   controllers.RegisterRoutes(app)
 }

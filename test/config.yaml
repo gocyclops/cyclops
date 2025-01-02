@@ -1,4 +1,4 @@
 project_name: test
-framework: gin
+framework: fiber
 features:
-    s3: true
+    redis: true

@@ -10,7 +10,8 @@ import (
   "test/myredis"
   "test/mys3"
   "test/routes"
-  "github.com/gin-gonic/gin"
+  "github.com/gofiber/fiber/v2"
+  "github.com/gofiber/fiber/v2/middleware/cors"
 
   "github.com/joho/godotenv"
   "github.com/robfig/cron/v3"
@@ -25,15 +26,22 @@ func main() {
   // Initialize the database connection
   database.InitDB()
   migrations.Migrate()
+  // Initialize the redis connection
+  myredis.InitRedis()
+  // Initialize S3 connection
+  mys3.InitS3()
 
   allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
-  // Initialize Gin router
-  r := gin.Default()
-  r.Use(gin.Logger())
-  r.Use(gin.Recovery())
+  // Initialize Fiber router
+  app := fiber.New()
+  app.Use(cors.New(cors.Config{
+    AllowOrigins:     allowedOrigins,
+    AllowHeaders:     "Origin, Content-Type, Accept",
+    AllowCredentials: true,
+  }))
 
   // Register all routes
-  routes.RegisterRoutes(r, myredis.RedisClient)
+  routes.RegisterRoutes(app, myredis.RedisClient)
 
   // Set up cron job
   c := cron.New()
@@ -43,8 +51,9 @@ func main() {
   c.Start()
 
   defer c.Stop()
+  log.Println("Server is running at http://localhost:8080")
   // Start the server
-  if err := r.Run(":8080"); err != nil {
+  if err := app.Listen(":8080"); err != nil {
     log.Fatalf("Failed to run server: %v", err)
   }
 }
