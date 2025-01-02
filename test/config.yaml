@@ -1,4 +1,0 @@
-project_name: test
-framework: gin
-features:
-    redis: true
