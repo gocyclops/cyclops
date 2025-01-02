@@ -55,6 +55,10 @@ func (m Model) viewConfirm() string {
 	return s + "\nPress Enter to generate, Esc to go back."
 }
 
+func (m Model) viewDone() string {
+	return m.progress
+}
+
 func (m Model) View() string {
 	switch m.state {
 		case "input":
@@ -65,6 +69,8 @@ func (m Model) View() string {
 			return m.viewFeatures()
 		case "confirm":
 			return m.viewConfirm()
+		case "done":
+			return m.viewDone()
 		default:
 			return "Error: Unknown state"
 	}
