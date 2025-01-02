@@ -113,7 +113,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
       case "done":
         if msg.String() == "enter" {
 					return m, tea.Quit
-				}
+			}
 		}
 
 	case errMsg:
