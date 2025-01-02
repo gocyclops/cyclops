@@ -111,19 +111,21 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "confirm":
 				return m.updateConfirm(msg)
       case "done":
-        return m, tea.Quit
+        if msg.String() == "enter" {
+					return m, tea.Quit
+				}
 		}
 
 	case errMsg:
 		if msg.err != nil {
 			m.err = msg.err
 			m.progress = fmt.Sprintf("Error: %v", msg.err)
-		} else {
-			m.progress = "Project generation complete! 🎉\n"
 		}
+
+		m.progress = "Project generation complete! 🎉\n\nPress Enter to exit."
 		m.generating = false
 		m.state = "done"
-		return m, tea.Quit
+		return m, nil
 	}
 
 	return m, nil
