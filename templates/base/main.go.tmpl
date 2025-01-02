@@ -19,7 +19,7 @@ import (
   {{- else if eq .Framework "echo" }}
   "github.com/labstack/echo/v4"
   "github.com/labstack/echo/v4/middleware"
-  {{- else if eq .Framework "mux" }}
+  {{- else if eq .Framework "gorilla/mux" }}
   "github.com/gorilla/mux"
   {{- end }}
 
@@ -122,7 +122,7 @@ func main() {
   if err := e.Start(":8080"); err != nil {
     log.Fatalf("Failed to run server: %v", err)
   }
-  {{- else if eq .Framework "mux" }}
+  {{- else if eq .Framework "gorilla/mux" }}
   // Initialize Gorilla Mux router
   r := mux.NewRouter()
 
