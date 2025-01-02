@@ -42,7 +42,7 @@ func main() {
   myredis.InitRedis()
   {{- end }}
 
-  {{- if .Features.redis }}
+  {{- if .Features.s3 }}
   // Initialize S3 connection
   mys3.InitS3()
   {{- end }}
@@ -59,7 +59,7 @@ func main() {
   }))
 
   // Register all routes
-  routes.RegisterRoutes(app, myredis.RedisClient)
+  routes.RegisterRoutes(app{{ if .Features.redis }}, myredis.RedisClient{{ end }})
 
   // Set up cron job
   c := cron.New()
@@ -91,7 +91,7 @@ func main() {
   }))
 
   // Register all routes
-  routes.RegisterRoutes(r, myredis.RedisClient)
+  routes.RegisterRoutes(r{{ if .Features.redis }}, myredis.RedisClient{{ end }})
 
   // Set up cron job
   c := cron.New()
@@ -117,7 +117,7 @@ func main() {
   }))
 
   // Register all routes
-  routes.RegisterRoutes(e, myredis.RedisClient)
+  routes.RegisterRoutes(e{{ if .Features.redis }}, myredis.RedisClient{{ end }})
 
   // Set up cron job
   c := cron.New()
@@ -147,7 +147,7 @@ func main() {
   )
 
   // Register all routes
-  routes.RegisterRoutes(r, myredis.RedisClient)
+  routes.RegisterRoutes(r{{ if .Features.redis }}, myredis.RedisClient{{ end }})
 
   // Set up cron job
   c := cron.New()
