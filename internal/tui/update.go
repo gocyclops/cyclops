@@ -81,11 +81,7 @@ func (m Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 				Framework: m.frameworks[m.cursor],
 				Features:  m.selected,
 			}
-	
-			if err := project.Generate(); err != nil {
-				m.err = err
-			}
-			
+				
 			m.generating = true
 			m.progress = "Generating project..."
 			return m, generateProject(project)	
