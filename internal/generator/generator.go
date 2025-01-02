@@ -23,6 +23,7 @@ var baseDirectories = []string{
 	"repository",
 	"routes",
 	"migrations",
+	".github",
 }
 
 var featureDirectories = map[string]string{
