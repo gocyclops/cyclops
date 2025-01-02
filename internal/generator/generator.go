@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"text/template"
+
+	"github.com/gocyclops/cyclops/internal/config"
 )
 
 type Project struct {
@@ -127,6 +129,20 @@ func (p *Project) generateFrameworkFiles() error {
 	return p.generateFiles(frameworkFilesTemplates)
 }
 
+func (p *Project) generateConfigYaml() error {
+	cfg := &config.Config{
+		ProjectName: p.Name,
+		Framework: p.Framework,
+		Features: p.Features,
+	}
+
+	if err := config.Save(cfg, filepath.Join(p.Name, "config.yaml")); err != nil {
+		return fmt.Errorf("error saving config.yaml: %w", err)
+	}
+
+	return nil
+}
+
 func (p *Project) generateFeatureFiles() error {
 	for feature, enabled := range p.Features {
 		if enabled {
@@ -172,6 +188,10 @@ func (p *Project) Generate() error {
 
 	if err := p.generateFeatureFiles(); err != nil {
 		return fmt.Errorf("failed to generate feature files: %w", err)
+	}
+
+	if err := p.generateConfigYaml(); err != nil {
+		return fmt.Errorf("failed to generate config.yaml: %w", err)
 	}
 
 	return nil
