@@ -72,16 +72,16 @@ func (m Model) updateFeatures(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+func (m *Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
 		if !m.generating {
 			project := generator.Project{
 				Name:      m.projectInput.Value(),
-				Framework: m.frameworks[m.cursor],
+				Framework: m.framework,
 				Features:  m.selected,
 			}
-				
+			
 			m.generating = true
 			m.progress = "Generating project..."
 			return m, generateProject(project)	
