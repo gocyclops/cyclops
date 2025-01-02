@@ -89,7 +89,7 @@ func main() {
     AllowCredentials: true,
     MaxAge:           12 * time.Hour,
   }))
-  
+
   // Register all routes
   routes.RegisterRoutes(r, myredis.RedisClient)
 
@@ -135,6 +135,16 @@ func main() {
   {{- else if eq .Framework "gorilla/mux" }}
   // Initialize Gorilla Mux router
   r := mux.NewRouter()
+
+  // Set up CORS
+  corsHandler := handlers.CORS(
+    handlers.AllowedOrigins([]string{"http://example.com"}),
+    handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"}),
+    handlers.AllowedHeaders([]string{"Origin", "Content-Type"}),
+    handlers.ExposedHeaders([]string{"Content-Length"}),
+    handlers.AllowCredentials(),
+    handlers.MaxAge(12*60*60),
+  )
 
   // Register all routes
   routes.RegisterRoutes(r, myredis.RedisClient)
