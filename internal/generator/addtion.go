@@ -2,15 +2,15 @@ package generator
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
-	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	ProjectName string            `yaml:"projectName"`
-	Framework   string            `yaml:"framework"`
-	Features    map[string]bool   `yaml:"features"`
+	ProjectName string          `yaml:"projectName"`
+	Framework   string          `yaml:"framework"`
+	Features    map[string]bool `yaml:"features"`
 }
 
 type FeatureAdder struct {

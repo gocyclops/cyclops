@@ -8,9 +8,9 @@ import (
 )
 
 type Config struct {
-	ProjectName	string	`yaml:"project_name"`
-	Framework	string `yaml:"framework"`
-	Features	map[string]bool	`yaml:"features"`
+	ProjectName string          `yaml:"project_name"`
+	Framework   string          `yaml:"framework"`
+	Features    map[string]bool `yaml:"features"`
 }
 
 func Load(path string) (*Config, error) {

@@ -11,11 +11,11 @@ import (
 )
 
 type Project struct {
-	Name      string
-	ModuleName	string
-	Framework string
-	Features  map[string]bool
-	RootDir   string
+	Name       string
+	ModuleName string
+	Framework  string
+	Features   map[string]bool
+	RootDir    string
 }
 
 var baseDirectories = []string{
@@ -66,7 +66,7 @@ func (p *Project) InitGoModule() error {
 	command := exec.Command("go", "mod", "init", p.ModuleName)
 	command.Dir = projectPath
 	command.Stdout = os.Stdout
-  command.Stderr = os.Stderr
+	command.Stderr = os.Stderr
 	if err := command.Run(); err != nil {
 		return fmt.Errorf("failed to create go module, %w", err)
 	}
@@ -146,25 +146,25 @@ func (p *Project) generateFiles(templates map[string]string) error {
 
 func (p *Project) generateBaseFiles() error {
 	baseFileTemplates := map[string]string{
-		"base/main.go.tmpl": "main.go",
-		"base/README.md.tmpl": "README.md",
-		"base/Dockerfile.tmpl": "Dockerfile",
-		"base/.air.toml.tmpl": ".air.toml",
-		"base/.env.tmpl": ".env",
-		"base/.gitignore.tmpl": ".gitignore",
-		"base/.dockerignore.tmpl": ".dockerignore",
-		"base/database/config.go.tmpl": "database/config.go",
-		"base/models/models.go.tmpl": "models/models.go",
+		"base/main.go.tmpl":                  "main.go",
+		"base/README.md.tmpl":                "README.md",
+		"base/Dockerfile.tmpl":               "Dockerfile",
+		"base/.air.toml.tmpl":                ".air.toml",
+		"base/.env.tmpl":                     ".env",
+		"base/.gitignore.tmpl":               ".gitignore",
+		"base/.dockerignore.tmpl":            ".dockerignore",
+		"base/database/config.go.tmpl":       "database/config.go",
+		"base/models/models.go.tmpl":         "models/models.go",
 		"base/repository/repository.go.tmpl": "repository/repository.go",
 		"base/migrations/migrations.go.tmpl": "migrations/migrations.go",
-		"base/test.yml.tmpl": ".github/workflows/test.yml",
+		"base/test.yml.tmpl":                 ".github/workflows/test.yml",
 	}
 	return p.generateFiles(baseFileTemplates)
 }
 
 func (p *Project) generateFrameworkFiles() error {
 	frameworkFilesTemplates := map[string]string{
-		"frameworks/routes.tmpl": "routes/routes.go",
+		"frameworks/routes.tmpl":      "routes/routes.go",
 		"frameworks/controllers.tmpl": "controllers/example_controller.go",
 	}
 	return p.generateFiles(frameworkFilesTemplates)
@@ -173,8 +173,8 @@ func (p *Project) generateFrameworkFiles() error {
 func (p *Project) generateConfigYaml() error {
 	cfg := &config.Config{
 		ProjectName: p.Name,
-		Framework: p.Framework,
-		Features: p.Features,
+		Framework:   p.Framework,
+		Features:    p.Features,
 	}
 
 	if err := config.Save(cfg, filepath.Join(p.Name, "config.yaml")); err != nil {

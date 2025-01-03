@@ -96,7 +96,7 @@ func main() {
 		showHelp()
 		return
 	}
-	
+
 	args := flag.Args()
 	if len(args) == 0 {
 		fmt.Println(cyclopsSummary())

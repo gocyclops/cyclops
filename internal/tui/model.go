@@ -6,19 +6,19 @@ import (
 )
 
 type Model struct {
-	projectInput	textinput.Model
-	repoURL				textinput.Model
-	activeInput		int
-	frameworks		[]string
-	features			[]string
-	cursor				int
-	selected			map[string]bool
-	state					string
-	projectName 	string
-  framework   	string
-  err         	error
-	generating bool
-  progress   string
+	projectInput textinput.Model
+	repoURL      textinput.Model
+	activeInput  int
+	frameworks   []string
+	features     []string
+	cursor       int
+	selected     map[string]bool
+	state        string
+	projectName  string
+	framework    string
+	err          error
+	generating   bool
+	progress     string
 }
 
 func (m Model) Init() tea.Cmd {
@@ -43,11 +43,11 @@ func NewModel() Model {
 
 	return Model{
 		projectInput: ti,
-		repoURL: link,
-		activeInput: 0,
-		frameworks: []string{"fiber", "gin", "chi", "gorilla/mux"},
-		features: []string{"redis", "s3", "mail", "auth"},
-		selected: make(map[string]bool),
-		state: StateInput,
+		repoURL:      link,
+		activeInput:  0,
+		frameworks:   []string{"fiber", "gin", "chi", "gorilla/mux"},
+		features:     []string{"redis", "s3", "mail", "auth"},
+		selected:     make(map[string]bool),
+		state:        StateInput,
 	}
 }

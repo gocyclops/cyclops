@@ -9,7 +9,7 @@ import (
 func CleanProjectName(name string) string {
 	name = strings.TrimSpace(name)
 
-	name = strings.Map(func (r rune) rune {
+	name = strings.Map(func(r rune) rune {
 		switch {
 		case unicode.IsLetter(r):
 			return unicode.ToLower(r)
@@ -20,7 +20,7 @@ func CleanProjectName(name string) string {
 		default:
 			return -1
 		}
-	},name)
+	}, name)
 
 	name = regexp.MustCompile(`-+`).ReplaceAllString(name, "-")
 
@@ -29,7 +29,7 @@ func CleanProjectName(name string) string {
 
 func CleanRepoUrl(url string) string {
 	url = strings.TrimSpace(url)
-	
+
 	url = strings.TrimSuffix(url, ".git")
 
 	url = strings.TrimPrefix(url, "https://")

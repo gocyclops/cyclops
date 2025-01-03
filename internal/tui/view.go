@@ -76,17 +76,17 @@ func (m Model) viewDone() string {
 
 func (m Model) View() string {
 	switch m.state {
-		case "input":
-			return m.viewInput()
-		case "framework":
-			return m.viewFramework()
-		case "features":
-			return m.viewFeatures()
-		case "confirm":
-			return m.viewConfirm()
-		case "done":
-			return m.viewDone()
-		default:
-			return "Error: Unknown state"
+	case "input":
+		return m.viewInput()
+	case "framework":
+		return m.viewFramework()
+	case "features":
+		return m.viewFeatures()
+	case "confirm":
+		return m.viewConfirm()
+	case "done":
+		return m.viewDone()
+	default:
+		return "Error: Unknown state"
 	}
 }

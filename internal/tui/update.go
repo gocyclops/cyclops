@@ -15,7 +15,7 @@ type errMsg struct {
 func generateProject(project generator.Project) tea.Cmd {
 	return func() tea.Msg {
 		err := project.Generate()
-    return errMsg{err: err}
+		return errMsg{err: err}
 	}
 }
 
@@ -30,19 +30,19 @@ func (m Model) updateInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 				m.err = fmt.Errorf("%s", errMsg)
 				return m, nil
 			}
-		
+
 			m.state = "framework"
 			return m, nil
 		}
 
 		if m.activeInput == 0 {
 			m.projectInput.Blur()
-      m.repoURL.Focus()
-      m.activeInput = 1
+			m.repoURL.Focus()
+			m.activeInput = 1
 		} else {
 			m.repoURL.Blur()
-      m.projectInput.Focus()
-      m.activeInput = 0
+			m.projectInput.Focus()
+			m.activeInput = 0
 		}
 
 		return m, nil
@@ -50,9 +50,9 @@ func (m Model) updateInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		var cmd tea.Cmd
 		if m.activeInput == 0 {
 			m.projectInput, cmd = m.projectInput.Update(msg)
-	} else {
+		} else {
 			m.repoURL, cmd = m.repoURL.Update(msg)
-	}
+		}
 		return m, cmd
 	}
 }
@@ -60,7 +60,7 @@ func (m Model) updateInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m Model) updateFramework(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "up", "k":
-		if m.cursor > 0{
+		if m.cursor > 0 {
 			m.cursor--
 		}
 	case "down", "j":
@@ -107,15 +107,15 @@ func (m *Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "enter":
 		if !m.generating {
 			project := generator.Project{
-				Name:      m.projectInput.Value(),
-				Framework: m.framework,
-				Features:  m.selected,
+				Name:       m.projectInput.Value(),
+				Framework:  m.framework,
+				Features:   m.selected,
 				ModuleName: m.repoURL.Value(),
 			}
-			
+
 			m.generating = true
 			m.progress = "Generating project..."
-			return m, generateProject(project)	
+			return m, generateProject(project)
 		}
 	case "esc":
 		if !m.generating {
@@ -128,22 +128,22 @@ func (m *Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-    if msg.String() == "ctrl+c" {
-      return m, tea.Quit
-    }
-    
+		if msg.String() == "ctrl+c" {
+			return m, tea.Quit
+		}
+
 		switch m.state {
-			case "input":
-				return m.updateInput(msg)
-			case "framework":
-				return m.updateFramework(msg)
-			case "features":
-				return m.updateFeatures(msg)
-			case "confirm":
-				return m.updateConfirm(msg)
-      case "done":
-        if msg.String() == "enter" {
-					return m, tea.Quit
+		case "input":
+			return m.updateInput(msg)
+		case "framework":
+			return m.updateFramework(msg)
+		case "features":
+			return m.updateFeatures(msg)
+		case "confirm":
+			return m.updateConfirm(msg)
+		case "done":
+			if msg.String() == "enter" {
+				return m, tea.Quit
 			}
 		}
 
