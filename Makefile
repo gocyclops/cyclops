@@ -1,4 +1,3 @@
-.DEFAULT_GOAL := install
 .PHONY:fmt vet build install
 fmt:
 	go fmt ./...
