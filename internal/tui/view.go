@@ -59,7 +59,7 @@ func (m Model) viewConfirm() string {
 		return fmt.Sprintf("Progress: %s", m.progress)
 	}
 
-	s := fmt.Sprintf("Project Name: %s\n", m.projectName)
+	s := fmt.Sprintf("Project Name: %s\n", m.projectInput.Value())
 	s += fmt.Sprintf("Framework: %s\n", m.framework)
 	s += "Features:\n"
 	for feature, selected := range m.selected {

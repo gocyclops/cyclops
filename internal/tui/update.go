@@ -8,6 +8,8 @@ import (
 	"github.com/gocyclops/cyclops/utils"
 )
 
+var CleanProjectName, CleanRepoURL string
+
 type errMsg struct {
 	err error
 }
@@ -20,13 +22,13 @@ func generateProject(project generator.Project) tea.Cmd {
 }
 
 func (m Model) updateInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
-	cleanProjectName := utils.CleanProjectName(m.projectInput.Value())
-	cleanRepoURL := utils.CleanRepoUrl(m.repoURL.Value())
+	CleanProjectName = utils.CleanProjectName(m.projectInput.Value())
+	CleanRepoURL = utils.CleanRepoUrl(m.repoURL.Value())
 
 	switch msg.String() {
 	case "tab", "shift+tab", "up", "down", "enter":
 		if msg.String() == "enter" && m.activeInput == 1 {
-			if valid, errMsg := utils.ValidateInputs(cleanProjectName, cleanRepoURL); !valid {
+			if valid, errMsg := utils.ValidateInputs(CleanProjectName, CleanRepoURL); !valid {
 				m.err = fmt.Errorf("%s", errMsg)
 				return m, nil
 			}
@@ -107,10 +109,11 @@ func (m *Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "enter":
 		if !m.generating {
 			project := generator.Project{
-				Name:       m.projectInput.Value(),
+				Name:       CleanProjectName,
 				Framework:  m.framework,
 				Features:   m.selected,
-				ModuleName: m.repoURL.Value(),
+				ModuleName: CleanRepoURL,
+				RootDir:    CleanProjectName,
 			}
 
 			m.generating = true
