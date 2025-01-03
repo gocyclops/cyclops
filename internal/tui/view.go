@@ -6,17 +6,23 @@ import (
 
 func getInputHint(activeInput int) string {
 	if activeInput == 0 {
-			return "Tab to switch to repository • Enter to submit project name"
+		return "Tab to switch to repository • Enter to submit project name"
 	}
 	return "Tab to switch to project name • Enter to continue"
 }
 
 func (m Model) viewInput() string {
+	var errorMsg string
+	if m.err != nil {
+			errorMsg = "\n❌ " + m.err.Error()  // Add emoji for visibility
+	}
+
 	return fmt.Sprintf(
-		"Project name: (tab/shift+tab to switch)\n\n%s\n\nRemote repository:\n\n%s\n\n%s",
+		"Project name: (tab/shift+tab to switch)\n\n%s\n\nRemote repository:\n\n%s\n\n%s%s",
 		m.projectInput.View(),
 		m.repoURL.View(),
 		getInputHint(m.activeInput),
+		errorMsg,
 	)
 }
 
