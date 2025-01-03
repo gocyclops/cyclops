@@ -1,4 +1,5 @@
 .PHONY:fmt vet build install
+all: fmt vet build install
 fmt:
 	go fmt ./...
 vet:
