@@ -71,6 +71,8 @@ func (m Model) updateFramework(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.framework = m.frameworks[m.cursor]
 		m.state = "features"
 		m.cursor = 0
+	case "esc":
+		m.state = "input"
 	}
 	return m, nil
 }
@@ -94,6 +96,8 @@ func (m Model) updateFeatures(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		}
 	case "tab":
 		m.state = "confirm"
+	case "esc":
+		m.state = "framework"
 	}
 	return m, nil
 }
