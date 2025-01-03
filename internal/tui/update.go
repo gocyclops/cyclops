@@ -20,9 +20,17 @@ func generateProject(project generator.Project) tea.Cmd {
 }
 
 func (m Model) updateInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+	cleanProjectName := utils.CleanProjectName(m.projectInput.Value())
+	cleanRepoURL := utils.CleanRepoUrl(m.repoURL.Value())
+
 	switch msg.String() {
 	case "tab", "shift+tab", "up", "down", "enter":
 		if msg.String() == "enter" && m.activeInput == 1 {
+			if valid, errMsg := utils.ValidateInputs(cleanProjectName, cleanRepoURL); !valid {
+				m.err = fmt.Errorf("%s", errMsg)
+				return m, nil
+			}
+		
 			m.state = "framework"
 			return m, nil
 		}
@@ -94,14 +102,6 @@ func (m *Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
 		if !m.generating {
-			cleanProjectName := utils.CleanProjectName(m.projectInput.Value())
-      cleanRepoURL := utils.CleanRepoUrl(m.repoURL.Value())
-
-			if valid, errMsg := utils.ValidateInputs(cleanProjectName, cleanRepoURL); !valid {
-				m.err = fmt.Errorf("%s", errMsg)
-				return m, nil
-			}
-
 			project := generator.Project{
 				Name:      m.projectInput.Value(),
 				Framework: m.framework,
