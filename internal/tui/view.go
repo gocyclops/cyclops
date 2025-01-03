@@ -35,7 +35,7 @@ func (m Model) viewFramework() string {
 		}
 		s += fmt.Sprintf("%s %s\n", cursor, fw)
 	}
-	return s + "\nUse arrow keys to navigate. Press Enter to select."
+	return s + "\nUse arrow keys to navigate, Esc to go back. Press Enter to select."
 }
 
 func (m Model) viewFeatures() string {
@@ -51,7 +51,7 @@ func (m Model) viewFeatures() string {
 		}
 		s += fmt.Sprintf("%s [%s] %s\n", cursor, selected, feature)
 	}
-	return s + "\nUse arrow keys to navigate, Enter to toggle, Tab to confirm."
+	return s + "\nUse arrow keys to navigate, Esc to go back, Enter to toggle, Tab to confirm."
 }
 
 func (m Model) viewConfirm() string {
