@@ -20,13 +20,30 @@ func generateProject(project generator.Project) tea.Cmd {
 
 func (m Model) updateInput(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
-	case "enter":
-		m.projectName = m.projectInput.Value()
-		m.state = "framework"
+	case "tab", "shift+tab", "up", "down", "enter":
+		if msg.String() == "enter" && m.activeInput == 1 {
+			m.state = "framework"
+			return m, nil
+		}
+
+		if m.activeInput == 0 {
+			m.projectInput.Blur()
+      m.repoURL.Focus()
+      m.activeInput = 1
+		} else {
+			m.repoURL.Blur()
+      m.projectInput.Focus()
+      m.activeInput = 0
+		}
+
 		return m, nil
 	default:
 		var cmd tea.Cmd
-		m.projectInput, cmd = m.projectInput.Update(msg)
+		if m.activeInput == 0 {
+			m.projectInput, cmd = m.projectInput.Update(msg)
+	} else {
+			m.repoURL, cmd = m.repoURL.Update(msg)
+	}
 		return m, cmd
 	}
 }

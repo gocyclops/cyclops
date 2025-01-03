@@ -4,10 +4,19 @@ import (
 	"fmt"
 )
 
+func getInputHint(activeInput int) string {
+	if activeInput == 0 {
+			return "Tab to switch to repository • Enter to submit project name"
+	}
+	return "Tab to switch to project name • Enter to continue"
+}
+
 func (m Model) viewInput() string {
 	return fmt.Sprintf(
-		"Enter project name:\n\n%s\n\nPress Enter to continue.",
+		"Project name: (tab/shift+tab to switch)\n\n%s\n\nRemote repository:\n\n%s\n\n%s",
 		m.projectInput.View(),
+		m.repoURL.View(),
+		getInputHint(m.activeInput),
 	)
 }
 

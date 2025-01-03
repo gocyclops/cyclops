@@ -7,6 +7,8 @@ import (
 
 type Model struct {
 	projectInput	textinput.Model
+	repoURL				textinput.Model
+	activeInput		int
 	frameworks		[]string
 	features			[]string
 	cursor				int
@@ -33,11 +35,16 @@ const (
 
 func NewModel() Model {
 	ti := textinput.New()
-	ti.Placeholder = "Enter project name"
+	ti.Placeholder = "project-name"
 	ti.Focus()
+
+	link := textinput.New()
+	link.Placeholder = "github.com/username/repo"
 
 	return Model{
 		projectInput: ti,
+		repoURL: link,
+		activeInput: 0,
 		frameworks: []string{"fiber", "gin", "chi", "gorilla/mux"},
 		features: []string{"redis", "s3", "mail", "auth"},
 		selected: make(map[string]bool),
