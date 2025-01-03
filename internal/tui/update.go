@@ -5,6 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/gocyclops/cyclops/internal/generator"
+	"github.com/gocyclops/cyclops/utils"
 )
 
 type errMsg struct {
@@ -93,6 +94,14 @@ func (m *Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "enter":
 		if !m.generating {
+			cleanProjectName := utils.CleanProjectName(m.projectInput.Value())
+      cleanRepoURL := utils.CleanRepoUrl(m.repoURL.Value())
+
+			if valid, errMsg := utils.ValidateInputs(cleanProjectName, cleanRepoURL); !valid {
+				m.err = fmt.Errorf("%s", errMsg)
+				return m, nil
+			}
+
 			project := generator.Project{
 				Name:      m.projectInput.Value(),
 				Framework: m.framework,
