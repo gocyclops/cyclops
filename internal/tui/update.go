@@ -110,6 +110,7 @@ func (m *Model) updateConfirm(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 				Name:      m.projectInput.Value(),
 				Framework: m.framework,
 				Features:  m.selected,
+				ModuleName: m.repoURL.Value(),
 			}
 			
 			m.generating = true

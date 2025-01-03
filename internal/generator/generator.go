@@ -12,6 +12,7 @@ import (
 
 type Project struct {
 	Name      string
+	ModuleName	string
 	Framework string
 	Features  map[string]bool
 	RootDir   string
@@ -54,6 +55,17 @@ func (p *Project) InitGitRepo() error {
 		}
 	}
 
+	return nil
+}
+
+func (p *Project) InitGoModule() error {
+	projectPath := filepath.Clean(p.Name)
+
+	command := exec.Command("go", "mod", "init", p.ModuleName)
+	command.Dir = projectPath
+	if err := command.Run(); err != nil {
+		return fmt.Errorf("failed to create go module")
+	}
 	return nil
 }
 
@@ -222,6 +234,11 @@ func (p *Project) Generate() error {
 	if err := p.InitGitRepo(); err != nil {
 		return fmt.Errorf("failed to initialize git repository: %w", err)
 	}
+
+	if err := p.InitGoModule(); err != nil {
+		return fmt.Errorf("failed to initialize GO module: %w", err)
+	}
+
 
 	return nil
 }
