@@ -14,7 +14,7 @@ func getInputHint(activeInput int) string {
 func (m Model) viewInput() string {
 	var errorMsg string
 	if m.err != nil {
-			errorMsg = "\n❌ " + m.err.Error()  // Add emoji for visibility
+		errorMsg = "\n❌ " + m.err.Error()
 	}
 
 	return fmt.Sprintf(
