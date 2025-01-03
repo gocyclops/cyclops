@@ -14,7 +14,6 @@ type Model struct {
 	cursor       int
 	selected     map[string]bool
 	state        string
-	projectName  string
 	framework    string
 	err          error
 	generating   bool
