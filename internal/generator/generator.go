@@ -36,7 +36,7 @@ var featureDirectories = map[string]string{
 }
 
 func (p *Project) InitGitRepo() error {
-	projectPath := filepath.Clean(p.Name)
+	projectPath := filepath.Join(p.RootDir, p.Name)
 
 	commands := []struct {
 		name string
@@ -59,7 +59,7 @@ func (p *Project) InitGitRepo() error {
 }
 
 func (p *Project) InitGoModule() error {
-	projectPath := filepath.Clean(p.Name)
+	projectPath := filepath.Join(p.RootDir, p.Name)
 
 	command := exec.Command("go", "mod", "init", p.ModuleName)
 	command.Dir = projectPath
@@ -238,7 +238,6 @@ func (p *Project) Generate() error {
 	if err := p.InitGoModule(); err != nil {
 		return fmt.Errorf("failed to initialize GO module: %w", err)
 	}
-
 
 	return nil
 }
