@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/gocyclops/cyclops/internal/config"
+	"github.com/gocyclops/cyclops/templates"
 )
 
 type Project struct {
@@ -101,8 +102,15 @@ func (p *Project) createDirectories() error {
 }
 
 // Generate files from a template
+var templateFiles = templates.Files
+
 func (p *Project) generateFromTemplate(templatePath, outputPath string, data interface{}) error {
-	template, err := template.ParseFiles(templatePath)
+	content, err := templateFiles.ReadFile(templatePath)
+	if err != nil {
+		return fmt.Errorf("failed to read template %s: %w", templatePath, err)
+	}
+
+	template, err := template.New(filepath.Base(templatePath)).Parse(string(content))
 	if err != nil {
 		return fmt.Errorf("failed to parse template %s: %w", templatePath, err)
 	}
@@ -121,10 +129,10 @@ func (p *Project) generateFromTemplate(templatePath, outputPath string, data int
 }
 
 func (p *Project) generateFile(template, output string) error {
-	templatePath := filepath.Join("templates", template)
+	//templatePath := filepath.Join("templates", template)
 	outputPath := filepath.Join(p.RootDir, output)
 
-	if err := p.generateFromTemplate(templatePath, outputPath, p); err != nil {
+	if err := p.generateFromTemplate(template, outputPath, p); err != nil {
 		return fmt.Errorf("failed to generate file %s: %w", output, err)
 	}
 
