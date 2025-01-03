@@ -33,7 +33,7 @@ var featureDirectories = map[string]string{
 	"redis": "myredis",
 	"s3":    "mys3",
 	"mail":  "mail",
-	"utils": "utils",
+	"auth":  "utils",
 }
 
 func (p *Project) InitGitRepo() error {
