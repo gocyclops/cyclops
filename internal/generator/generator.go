@@ -36,7 +36,7 @@ var featureDirectories = map[string]string{
 }
 
 func (p *Project) InitGitRepo() error {
-	projectPath := filepath.Join(p.RootDir, p.Name)
+	projectPath := p.RootDir
 
 	commands := []struct {
 		name string
@@ -50,8 +50,6 @@ func (p *Project) InitGitRepo() error {
 	for _, cmd := range commands {
 		command := exec.Command(cmd.name, cmd.args...)
 		command.Dir = projectPath
-		command.Stdout = os.Stdout
-		command.Stderr = os.Stderr
 		if err := command.Run(); err != nil {
 			return fmt.Errorf("failed to execute git command '%s': %w", cmd.name, err)
 		}
@@ -61,14 +59,12 @@ func (p *Project) InitGitRepo() error {
 }
 
 func (p *Project) InitGoModule() error {
-	projectPath := filepath.Join(p.RootDir, p.Name)
+	projectPath := p.RootDir
 
 	command := exec.Command("go", "mod", "init", p.ModuleName)
 	command.Dir = projectPath
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-	if err := command.Run(); err != nil {
-		return fmt.Errorf("failed to create go module, %w", err)
+	if output, err := command.CombinedOutput(); err != nil {
+		return fmt.Errorf("failed to create go module: %s, %w", string(output), err)
 	}
 	return nil
 }
@@ -216,31 +212,38 @@ func (p *Project) generateFeatureFiles() error {
 
 func (p *Project) Generate() error {
 	if err := p.createDirectories(); err != nil {
-		return fmt.Errorf("failed to create project directories: %w", err)
+		fmt.Printf("Error creating directories: %v\n", err)
+		return err
 	}
 
 	if err := p.generateBaseFiles(); err != nil {
-		return fmt.Errorf("failed to generate base files: %w", err)
+		fmt.Printf("Error generating base files: %v\n", err)
+		return err
 	}
 
 	if err := p.generateFrameworkFiles(); err != nil {
-		return fmt.Errorf("failed to generate framework files: %w", err)
+		fmt.Printf("Error generating framework files: %v\n", err)
+		return err
 	}
 
 	if err := p.generateFeatureFiles(); err != nil {
-		return fmt.Errorf("failed to generate feature files: %w", err)
+		fmt.Printf("Error generating feature files: %v\n", err)
+		return err
 	}
 
 	if err := p.generateConfigYaml(); err != nil {
-		return fmt.Errorf("failed to generate config.yaml: %w", err)
+		fmt.Printf("Error generating config.yaml: %v\n", err)
+		return err
 	}
 
 	if err := p.InitGoModule(); err != nil {
-		return fmt.Errorf("failed to initialize GO module: %w", err)
+		fmt.Printf("Error initializing go module: %v\n", err)
+		return err
 	}
 
 	if err := p.InitGitRepo(); err != nil {
-		return fmt.Errorf("failed to initialize git repository: %w", err)
+		fmt.Printf("Error initializing git repo: %v\n", err)
+		return err
 	}
 
 	return nil
