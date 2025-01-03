@@ -50,6 +50,8 @@ func (p *Project) InitGitRepo() error {
 	for _, cmd := range commands {
 		command := exec.Command(cmd.name, cmd.args...)
 		command.Dir = projectPath
+		command.Stdout = os.Stdout
+		command.Stderr = os.Stderr
 		if err := command.Run(); err != nil {
 			return fmt.Errorf("failed to execute git command '%s': %w", cmd.name, err)
 		}
@@ -63,8 +65,10 @@ func (p *Project) InitGoModule() error {
 
 	command := exec.Command("go", "mod", "init", p.ModuleName)
 	command.Dir = projectPath
+	command.Stdout = os.Stdout
+  command.Stderr = os.Stderr
 	if err := command.Run(); err != nil {
-		return fmt.Errorf("failed to create go module")
+		return fmt.Errorf("failed to create go module, %w", err)
 	}
 	return nil
 }
@@ -231,12 +235,12 @@ func (p *Project) Generate() error {
 		return fmt.Errorf("failed to generate config.yaml: %w", err)
 	}
 
-	if err := p.InitGitRepo(); err != nil {
-		return fmt.Errorf("failed to initialize git repository: %w", err)
-	}
-
 	if err := p.InitGoModule(); err != nil {
 		return fmt.Errorf("failed to initialize GO module: %w", err)
+	}
+
+	if err := p.InitGitRepo(); err != nil {
+		return fmt.Errorf("failed to initialize git repository: %w", err)
 	}
 
 	return nil
