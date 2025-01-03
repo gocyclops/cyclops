@@ -11,8 +11,24 @@ import (
 	"github.com/gocyclops/cyclops/internal/generator"
 )
 
+const Logo = `
+     _________   ______  __      ____  ____  _____
+    / ____/  /  / ___/ / /     / __ \/ __ \/ ___/
+   / /   / /   / /    / /     / / / / /_/ /\__ \ 
+  / /___/ /___/ /____/ /____ / /_/ / ____/___/ / 
+  \____/_____/\____/_____/_/\____/_/    /____/  
+`
+
+func printLogo() string {
+	return Logo
+}
+
 func showHelp() {
-	fmt.Println(`Cyclops - Go Backend Boilerplate
+	help := printLogo()
+	help += `
+
+
+	Cyclops - Go Backend Boilerplate
 
 		Usage:
 			cyclops [command] [flags]
@@ -29,7 +45,8 @@ func showHelp() {
 			- s3        Add S3 storage
 			- mail      Add email functionality
 			- auth      Add authentication
-		`)
+		`
+	fmt.Println(help)
 }
 
 func checkConfig(path string) bool {
@@ -39,10 +56,15 @@ func checkConfig(path string) bool {
 }
 
 func cyclopsSummary() string {
-	return `Cyclops - A modern Go project generator
+	sum := printLogo()
+	sum += `
+
+
+	Cyclops - A modern Go backend boilerplate
 		Use 'cyclops new' to create a new project
 		Use 'cyclops add' to add features to existing project
 		Use 'cyclops --help' for more information`
+	return sum
 }
 
 func featureAddition(feature string) error {
@@ -74,10 +96,11 @@ func main() {
 		showHelp()
 		return
 	}
-
+	
 	args := flag.Args()
 	if len(args) == 0 {
 		fmt.Println(cyclopsSummary())
+		os.Exit(0)
 	}
 
 	command := args[0]
