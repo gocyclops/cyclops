@@ -162,6 +162,7 @@ func (p *Project) generateBaseFiles() error {
 		"base/repository/repository.go.tmpl": "repository/repository.go",
 		"base/migrations/migrations.go.tmpl": "migrations/migrations.go",
 		"base/test.yml.tmpl":                 ".github/workflows/test.yml",
+		"base/docker-compose.yaml.tmpl":      "docker-compose.yaml",
 	}
 	return p.generateFiles(baseFileTemplates)
 }
