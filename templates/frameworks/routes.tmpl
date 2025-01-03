@@ -1,0 +1,33 @@
+// Package routes provides the routing configuration for the {{ .Name }} application.
+// It includes the necessary imports and the function to register all routes.
+package routes
+
+import (
+    "{{ .Name }}/controllers"
+
+    {{- if eq .Framework "fiber" }}
+    "github.com/gofiber/fiber/v2"
+    {{- else if eq .Framework "gin" }}
+    "github.com/gin-gonic/gin"
+    {{- else if eq .Framework "chi" }}
+    "github.com/go-chi/chi/v5"
+    {{- else if eq .Framework "gorilla/mux" }}
+    "github.com/gorilla/mux"
+    {{- end }}
+
+    {{- if .Features.redis }}
+    "github.com/redis/go-redis/v9"
+    {{- end }}
+)
+
+// RegisterRoutes sets up the routes for the application using the provided
+// {{ .Framework }} app instance{{ if .Features.redis }}, and Redis client{{ end }}.
+//
+// Parameters:
+// - app: A pointer to the {{ .Framework }} app instance.
+{{- if .Features.redis }}
+// - redisClient: A pointer to the Redis client.
+{{- end }}
+func RegisterRoutes(app {{ if eq .Framework "fiber" }}*fiber.App{{ else if eq .Framework "gin" }}*gin.Engine{{ else if eq .Framework "echo" }}*echo.Echo{{ else if eq .Framework "gorilla/mux" }}*mux.Router{{ end }}{{ if .Features.redis }}, redisClient *redis.Client{{ end }}) {
+  controllers.RegisterRoutes(app)
+}

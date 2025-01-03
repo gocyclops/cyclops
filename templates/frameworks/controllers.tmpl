@@ -1,0 +1,148 @@
+// Package controllers provides the necessary functions and methods to handle
+// various routes in the {{ .Name }} application. This package is responsible for
+// managing the routing logic and ensuring that the appropriate controllers are
+// invoked for different endpoints.
+package controllers
+
+import (
+  "{{ .Name }}/models"
+  "{{ .Name }}/repository"
+  "encoding/json"
+  "net/http"
+
+  {{- if eq .Framework "fiber" }}
+  "github.com/gofiber/fiber/v2"
+  {{- else if eq .Framework "gin" }}
+  "github.com/gin-gonic/gin"
+  {{- else if eq .Framework "chi" }}
+  "github.com/go-chi/chi/v5"
+  {{- else if eq .Framework "gorilla/mux" }}
+  "github.com/gorilla/mux"
+  {{- end }}
+)
+
+{{- if eq .Framework "fiber" }}
+func Welcome(c *fiber.Ctx) error {
+  return c.SendString("Welcome to {{ .Name }}!")
+}
+
+// CreateUser is an example function that handles the creation of a new user.
+// It expects a JSON payload in the request body, which it parses into a User model.
+// If the JSON parsing fails, it returns a 400 Bad Request status with an error message.
+// If the user creation in the repository fails, it returns a 500 Internal Server Error status with an error message.
+// On successful creation, it returns a 201 Created status with the created user in the response.
+func CreateUser(c *fiber.Ctx) error {
+  user := new(models.User)
+
+  if err := c.BodyParser(user); err != nil {
+    return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Cannot parse JSON"})
+  }
+
+  if err := repository.CreateUser(user); err != nil {
+    return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Cannot create user"})
+  }
+
+  return c.Status(fiber.StatusCreated).JSON(user)
+}
+
+func RegisterRoutes(app *fiber.App) {
+  app.Get("/", func(c *fiber.Ctx) error {
+    return Welcome(c)
+  })
+  app.Post("/users", func(c *fiber.Ctx) error {
+    return CreateUser(c)
+  })
+}
+{{- else if eq .Framework "gin" }}
+func Welcome(c *gin.Context) {
+  c.String(200, "Welcome to {{ .Name }}!")
+}
+
+// CreateUser is an example function that handles the creation of a new user.
+// It expects a JSON payload in the request body, which it parses into a User model.
+// If the JSON parsing fails, it returns a 400 Bad Request status with an error message.
+// If the user creation in the repository fails, it returns a 500 Internal Server Error status with an error message.
+// On successful creation, it returns a 201 Created status with the created user in the response.
+func CreateUser(c *gin.Context) {
+  var user models.User
+
+  if err := c.ShouldBindJSON(&user); err != nil {
+    c.JSON(400, gin.H{"error": "Cannot parse JSON"})
+    return
+  }
+
+  if err := repository.CreateUser(&user); err != nil {
+    c.JSON(500, gin.H{"error": "Cannot create user"})
+    return
+  }
+
+  c.JSON(201, user)
+}
+
+func RegisterRoutes(router *gin.Engine) {
+  router.GET("/", Welcome)
+  router.POST("/users", CreateUser)
+}
+{{- else if eq .Framework "chi" }}
+func Welcome(w http.ResponseWriter, r *http.Request) {
+  w.Write([]byte("Welcome to {{ .Name }}!"))
+}
+
+// CreateUser is an example function that handles the creation of a new user.
+// It expects a JSON payload in the request body, which it parses into a User model.
+// If the JSON parsing fails, it returns a 400 Bad Request status with an error message.
+// If the user creation in the repository fails, it returns a 500 Internal Server Error status with an error message.
+// On successful creation, it returns a 201 Created status with the created user in the response.
+func CreateUser(w http.ResponseWriter, r *http.Request) {
+  var user models.User
+
+  if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+    http.Error(w, "Cannot parse JSON", http.StatusBadRequest)
+    return
+  }
+
+  if err := repository.CreateUser(&user); err != nil {
+    http.Error(w, "Cannot create user", http.StatusInternalServerError)
+    return
+  }
+
+  w.WriteHeader(http.StatusCreated)
+  json.NewEncoder(w).Encode(user)
+}
+
+func RegisterRoutes(router chi.Router) {
+  router.Get("/", Welcome)
+  router.Post("/users", CreateUser)
+}
+{{- else if eq .Framework "gorilla/mux" }}
+func Welcome(w http.ResponseWriter, r *http.Request) {
+  w.Write([]byte("Welcome to {{ .Name }}!"))
+}
+
+// CreateUser is an example function that handles the creation of a new user.
+// It expects a JSON payload in the request body, which it parses into a User model.
+// If the JSON parsing fails, it returns a 400 Bad Request status with an error message.
+// If the user creation in the repository fails, it returns a 500 Internal Server Error status with an error message.
+// On successful creation, it returns a 201 Created status with the created user in the response.
+func CreateUser(w http.ResponseWriter, r *http.Request) {
+  var user models.User
+
+  if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+    http.Error(w, "Cannot parse JSON", http.StatusBadRequest)
+    return
+  }
+
+  if err := repository.CreateUser(&user); err != nil {
+    http.Error(w, "Cannot create user", http.StatusInternalServerError)
+    return
+  }
+
+  w.WriteHeader(http.StatusCreated)
+  json.NewEncoder(w).Encode(user)
+}
+
+func RegisterRoutes(router *mux.Router) {
+  router.HandleFunc("/", Welcome).Methods("GET")
+  router.HandleFunc("/users", CreateUser).Methods("POST")
+}
+{{- end }}
