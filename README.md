@@ -1,131 +1,124 @@
-Cyclops - Go Backend Boilerplate
-
 # Cyclops 🚀
 
-Cyclops is a boilerplate for building a backend application in Go. It includes a setup for database connections, Redis, S3, and routing with Fiber. This template is designed to help you quickly get started with your Go backend project.
+A lightning-fast Go backend boilerplate that helps you ship production-ready APIs in minutes. Choose your favorite framework and add the features you need.
 
-## Features ✨
+## Features ⚡
 
-- **Fiber**: An Express-inspired web framework for Go.
-- **GORM**: The fantastic ORM library for Golang.
-- **Redis**: In-memory data structure store, used as a database, cache, and message broker.
-- **S3**: Integration with AWS S3 for file storage.
-- **SendGrid**: Email sending service.
-- **Cron**: Job scheduling library.
-- **Air**: Live reloading for Go applications.
-- **JWT**: JSON Web Tokens for secure authentication.
-- **Docker**: Containerization for consistent development and deployment environments.
-- **GitHub Actions**: CI/CD workflows for automated testing and deployment.
+- **Multiple Framework Support**:
+  - 🌟 Gin - High performance HTTP web framework
+  - 🚀 Echo - High performance, minimalist web framework
+  - ⚡ Fiber - Express-inspired web framework
+  - 🦍 Gorilla Mux - Powerful HTTP routing and URL matcher
 
-## Getting Started 🚀
+- **Core Features**:
+  - 📦 GORM with PostgreSQL
+  - 🔒 JWT Authentication
+  - 🔄 Migration System
+  - 📝 Structured Logging
+  - ⚙️ Environment Configuration
+  - 🐳 Docker Support
+  - 🔄 Live Reload with Air
 
-### Prerequisites 📋
+- **Optional Modules**:
+  - 📨 Mail Service Integration
+  - 💾 Redis Cache
+  - 📁 AWS S3 Storage
+  - 🔐 Authentication System
 
-- [Go 1.23 or higher](https://go.dev/dl/)
-- [Git](https://git-scm.com/)
-- [Docker](https://www.docker.com/) (optional, for running services like PostgreSQL and Redis)
+## Quick Start 🏃‍♂️
 
-### Installation 🛠️
+### Installation
 
-Clone the repository:
-
-```sh
-git clone https://github.com/gocyclops/cyclops.git your_custom_directory --depth=1
-cd your_custom_directory
-rm -rf .git
-git init
+```bash
+go install github.com/gocyclops/cyclops@latest
+cyclops
 ```
 
-Replace placeholders with your project name:
+### Choose Your Stack
 
-```sh
-find . -type f -exec sed -i 's/cyclops/yourprojectname/g' {} +
+```bash
+cd myproject
+# Follow the interactive CLI prompts to:
+# 1. Select your framework (Gin/Echo/Fiber/Gorilla)
+# 2. Choose additional features
+# 3. Configure your project
 ```
 
-Set up environment variables:
+### Run Your Project
 
-```sh
-cp .env.example .env
+```bash
 go mod tidy
-```
-
-Edit the `.env` file with your configuration:
-
-```env
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=your_db_name
-DB_PORT=your_db_port
-DB_HOST=your_db_host
-REDIS_URL=your_redis_url
-JWT_SECRET=your_jwt_secret
-SECURE_COOKIE=true
-MAIL_FROM=your_email@example.com
-S3_URL=your_s3_url
-S3_KEY_ID=your_s3_key_id
-S3_SECRET_ACCESS_KEY=your_s3_secret_access_key
-SENDGRID_API_KEY=your_sendgrid_api_key
-ALLOWED_ORIGINS=http://localhost:8080
-```
-
-Run the application:
-
-```sh
 go run main.go
 ```
 
-## Optionally with Docker 🐳
+## Project Structure 📁
 
 ```
-docker-compose up --build
+├── .env                # Environment variables
+├── .air.toml          # Live reload configuration
+├── Dockerfile         # Container configuration
+├── main.go            # Application entry point
+├── controllers/       # Request handlers
+├── models/           # Database models
+├── repository/       # Data access layer
+├── routes/           # API routes
+├── database/         # Database configuration
+├── migrations/       # Database migrations
+└── utils/           # Helper functions
+```
+
+## Configuration ⚙️
+
+1. Copy `.env.example` to `.env`
+2. Update environment variables:
+```env
+DB_HOST=localhost
+DB_USER=postgres
+DB_PASSWORD=password
+DB_NAME=myapp
+DB_PORT=5432
+```
+
+## Development 💻
+
+### Live Reload
+```bash
+# Install Air
+go install github.com/cosmtrek/air@latest
+
+# Run with live reload
+air
+```
+
+### Docker
+```bash
+# Build and run with Docker
+docker-compose up
 ```
 
 ## Documentation 📚
 
-- [Fiber Documentation](https://docs.gofiber.io/)
-- [GORM Documentation](https://gorm.io/docs/)
-- [Redis Go Client Documentation](https://github.com/go-redis/redis)
-- [AWS SDK for Go Documentation](https://aws.github.io/aws-sdk-go-v2/)
-- [SendGrid Go Library Documentation](https://github.com/sendgrid/sendgrid-go)
-- [Cron Documentation](https://github.com/robfig/cron)
-- [Air Documentation](https://github.com/cosmtrek/air)
-- [Docker Documentation](https://docs.docker.com/)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [JWT Documentation](https://jwt.io/introduction/)
-
-## Access the Application 🌐
-
-Open your browser and navigate to [http://localhost:8080](http://localhost:8080).
-
-## Using Air for Hot Reloading 🔄
-
-Install Air:
-
-```sh
-go install github.com/cosmtrek/air@latest
-```
-
-Edit the `.air.toml` file in the root of your project.
-
-Run Air:
-
-```sh
-air
-```
+- [Framework Guides](docs/frameworks.md)
+  - [Gin](https://gin-gonic.com/docs/)
+  - [Echo](https://echo.labstack.com/guide/)
+  - [Fiber](https://docs.gofiber.io/)
+  - [Gorilla](https://github.com/gorilla/mux#examples)
 
 ## Contributing 🤝
 
-If you want to say Thank You and/or support the active development of Cyclops:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing`)
+5. Open a Pull Request
 
-Add a GitHub Star to the project: [Star on GitHub](https://github.com/gocyclops/cyclops)
+## Support 💖
 
-Tweet about the project on your 𝕏 (Twitter): [Tweet about Cyclops](https://twitter.com/intent/tweet?text=Check%20out%20Cyclops%20-%20a%20boilerplate%20for%20building%20a%20backend%20application%20in%20Go!%20https://github.com/gocyclops/cyclops)
-
-Write a review or tutorial on Medium, Dev.to or personal blog: [Write on Medium](https://medium.com/), [Write on Dev.to](https://dev.to/)
-
-Support the project by donating a cup of coffee: [Buy Me a Coffee](https://www.buymeacoffee.com/gocyclops)
+- ⭐ Star this repo
+- 🐛 Report bugs via [Issues](https://github.com/gocyclops/cyclops/issues)
+- 💡 Request features via [Discussions](https://github.com/gocyclops/cyclops/discussions)
 
 ## License 📄
 
-Copyright © 2024 - present [TeddyMuli](https://github.com/TeddyMuli) and [Contributors](https://github.com/gocyclops/cyclops/graphs/contributors).
+Copyright © 2024 - present [TeddyMuli](https://github.com/TeddyMuli).
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
